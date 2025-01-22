@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCII Text Tree Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #00ffcc;
+    }
+    .instructions {
+      margin: 20px 0;
+      text-align: center;
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+    .generator {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    textarea {
+      width: 45%;
+      height: 400px;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: none;
+    }
+    .output {
+      width: 45%;
+      height: 400px;
+      background-color: #1e1e1e;
+      color: #00ffcc;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      white-space: pre-wrap;
+      overflow: auto;
+    }
+    .faq {
+      margin-top: 30px;
+    }
+    .faq h2 {
+      color: #00ffcc;
+    }
+    .faq p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>ASCII Text Tree Generator</h1>
+  <div class="instructions">
+    Use this online ASCII tree generator to create a beautifully formatted text tree from simple lines of text. Use "=" for indentation symbols to represent hierarchy levels.<br>
+    The result updates in real time as you type and can be used in Markdown or other documentation formats.
+  </div>
+  <div class="generator">
+    <textarea id="input" placeholder="Type your text here using '=' for indentation."></textarea>
+    <div id="output" class="output"></div>
+  </div>
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <p><strong>What can a text tree be used for?</strong><br>
+    Text trees help in organizing and clarifying documentation, such as folder structures, data hierarchies, or code architectures.</p>
+    <p><strong>What is the difference between a text tree and an ASCII tree?</strong><br>
+    ASCII trees only use basic characters, while this tool enhances readability by using extended tree symbols.</p>
+    <p><strong>Can I generate a text tree from Markdown?</strong><br>
+    Yes! Replace "#" with "=" in your Markdown content and paste it here to generate a tree.</p>
+    <p><strong>Can I edit both the input and the generated tree?</strong><br>
+    Absolutely! Changes to the input are reflected in the tree in real time, enabling seamless editing.</p>
+    <p><strong>Will I lose my input if I close the page?</strong><br>
+    No, your input is stored locally in your browser and remains intact when you reopen the page.</p>
+  </div>
+
+  <script>
+    const inputArea = document.getElementById("input");
+    const outputArea = document.getElementById("output");
+
+    inputArea.addEventListener("input", () => {
+      const input = inputArea.value.trim();
+      const lines = input.split("\n");
+      const result = [];
+      const stack = [];
+
+      lines.forEach(line => {
+        const level = (line.match(/^=+/) || [""])[0].length; // Count "=" for depth
+        const content = line.replace(/^=+/, "").trim(); // Remove "="
+        while (stack.length > level) stack.pop(); // Adjust stack depth
+        const prefix = stack.length > 0 ? stack.join("  ") + "  ├── " : "├── ";
+        result.push(`${prefix}${content}`);
+        stack[level] = "│";
+        if (lines.indexOf(line) === lines.length - 1 || (lines[lines.indexOf(line) + 1]?.match(/^=+/) || [""])[0].length <= level) {
+          result[result.length - 1] = result[result.length - 1].replace("├──", "└──");
+        }
+      });
+
+      outputArea.textContent = result.join("\n");
+    });
+  </script>
+</body>
+</html>
