@@ -1,0 +1,9 @@
+TreeViz/
+├── index.html          # Main application file
+├── README.html         # HTML format documentation
+├── README.txt          # Plain text documentation
+├── requirements.py     # Requirements script (informational)
+├── LICENSE            # Project license file
+└── repository_structure.txt  # This file
+
+Note: This is a simple, standalone web application that requires no build process or dependencies.
